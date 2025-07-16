@@ -7,21 +7,27 @@ import PieChart from './charts/PieChart';
 import ScatterPlot from './charts/ScatterPlot';
 import DataInputForm from './components/DataInputForm';
 import ChartSelector from './components/ChartSelector';
+import RealTimeControls from './components/RealTimeControls';
+import useRealTimeData from './hooks/useRealTimeData';
 
 import './App.css';
 
 const defaultData = [12, 45, 30, 80, 60, 90, 55];
 
 function App() {
-  const [data, setData] = useState(defaultData);
   const [selectedChart, setSelectedChart] = useState('line');
+  const { data, isRealTimeActive, toggleRealTime, resetData } = useRealTimeData(defaultData, 20);
 
   const handleDataChange = newData => {
-    setData(newData);
+    resetData(newData);
   };
 
   const handleChartChange = chartType => {
     setSelectedChart(chartType);
+  };
+
+  const handleResetData = () => {
+    resetData(defaultData);
   };
 
   const renderChart = () => {
@@ -53,12 +59,19 @@ function App() {
         <div className="controls-grid">
           <DataInputForm onDataChange={handleDataChange} />
           <ChartSelector selectedChart={selectedChart} onChartChange={handleChartChange} />
+          <RealTimeControls
+            isRealTimeActive={isRealTimeActive}
+            onToggleRealTime={toggleRealTime}
+            onResetData={handleResetData}
+            dataLength={data.length}
+          />
         </div>
 
         <div className="chart-container">
           <div className="chart-header">
             <h2 className="chart-title">
               {selectedChart.charAt(0).toUpperCase() + selectedChart.slice(1)} Chart
+              {isRealTimeActive && <span className="live-indicator">🔴 LIVE</span>}
             </h2>
             <div className="chart-title-underline"></div>
           </div>

@@ -37,16 +37,6 @@ const ChartSelector = ({ selectedChart, onChartChange }) => (
         </div>
       ))}
     </div>
-
-    {selectedChart && (
-      <div className="selected-chart-display">
-        <div className="selected-chart-info">
-          <span className="selected-chart-emoji">🎯</span>
-          <strong>Selected:</strong>
-          {chartTypes.find(c => c.key === selectedChart)?.label}
-        </div>
-      </div>
-    )}
   </div>
 );
 
